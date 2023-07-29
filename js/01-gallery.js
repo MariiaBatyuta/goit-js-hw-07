@@ -21,16 +21,21 @@ gallerry.insertAdjacentHTML('beforeend', galleryMarkup.join(''));
 gallerry.addEventListener('click', openOnClick);
 
 function openOnClick(evt) {
-    evt.preventDefault();
-    const instance = basicLightbox.create(`
-		<img src="${evt.target.dataset.source}">
+  if (evt.target.nodeName !== "IMG") {
+    return;
+  }
+  
+  evt.preventDefault();
+  const instance = basicLightbox.create(`		
+    <img src="${evt.target.dataset.source}">
 	`)
-  instance.show()
+
+  instance.show(() => console.log('onShow', instance));
   
   document.addEventListener("keydown", closeModal);
   function closeModal({ key }) {
     if (key === "Escape") {
-      instance.close()
+      instance.close(() => console.log('onClose', instance));
     }
   }
 }
